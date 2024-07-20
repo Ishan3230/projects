@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD operation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            
+        }
+        .task h1 {
+            margin: 0 0 20px;
+            font-size: 24px;
+            color: #333;
+        }
+        .input {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .input button {
+            padding: 10px 15px;
+            margin-left: 10px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .input button:hover {
+            background-color: #0056b3;
+        }
+        .task-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .task-row:last-child {
+            border-bottom: none;
+        }
+        .task-actions button {
+            margin-left: 10px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .task-actions button.delete {
+            background-color: #dc3545;
+            color: #fff;
+        }
+        .task-actions button.delete:hover {
+            background-color: #c82333;
+        }
+        .task-actions button.update {
+            background-color: #ffc107;
+            color: #fff;
+        }
+        .task-actions button.update:hover {
+            background-color: #e0a800;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="task">
+            <h1>CRUD operation</h1>
+            <div class="input">
+                <input type="text" id="taskInput" placeholder="Add new Task"/>
+                <button onclick="addInput()">Add Task</button>
+            </div>
+            <div id="taskList"></div>
+        </div>
+    </div>
+
+    <script>
+        let tasks = []
+
+        function addInput(){
+            const taskInput = document.getElementById('taskInput');
+            const taskText = taskInput.value.trim();
+
+            if(taskText !== ''){
+                tasks.push(taskText);
+                displayTasks();
+                taskInput.value = '';
+            } else {
+                alert("Task cannot be empty!");
+            }
+        }
+
+        function displayTasks(){
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = '';
+
+            tasks.forEach((task, index) => {
+                const taskRow = document.createElement('div');
+                taskRow.className = 'task-row';
+
+                const taskDiv = document.createElement('div');
+                taskDiv.textContent = task;
+
+                const taskActions = document.createElement('div');
+                taskActions.className = 'task-actions';
+
+                const deleteButton = document.createElement('button');
+                deleteButton.className = 'delete';
+                deleteButton.textContent = 'Delete';
+                deleteButton.onclick = () => {
+                    tasks.splice(index, 1);
+                    displayTasks();
+                };
+
+                const updateButton = document.createElement('button');
+                updateButton.className = 'update';
+                updateButton.textContent = 'Update';
+                updateButton.onclick = () => {
+                    const updatedTask = prompt('Enter updated task:', task);
+                    if (updatedTask !== null && updatedTask.trim() !== '') {
+                        tasks[index] = updatedTask.trim();
+                        displayTasks();
+                    } else {
+                        alert("Task cannot be empty!");
+                    }
+                };
+
+                taskActions.appendChild(deleteButton);
+                taskActions.appendChild(updateButton);
+                taskRow.appendChild(taskDiv);
+                taskRow.appendChild(taskActions);
+
+                taskList.appendChild(taskRow);
+            });
+        }
+    </script>
+</body>
+</html>
